@@ -5,7 +5,7 @@
 CREvaluator provides various continual learning metrics to evaluate continual learning performance. Additionally, it 
 provides task incremental learning models and visualization module for evaluation of previously seen tasks across task incremantal learning.
 
-![CreValuator](https://github.com/sefeoglu/cre-evaluation-toolkit/blob/master/docs/CREvaluator.jpg)
+
 
 ## CREvaluator 
 
