@@ -13,7 +13,7 @@ provides task incremental learning models and visualization module for evaluatio
 │   ├── metrics_settings.yaml
 │   └── training_settings.yaml
 └── src
-    ├── metrics                                       -> support various metrics for evaluation of continual relation extraction.
+    ├── metrics                               ->support various metrics for evaluation of continual relation extraction.
     │   ├── average_accuracy.py
     │   ├── average_error.py
     │   ├── average_forgetting.py
@@ -28,14 +28,14 @@ provides task incremental learning models and visualization module for evaluatio
     │   └── ....
     ├── task_preparation
     │   └── task_data.py
-    ├── training                                         -----> You can include your own trainer and models here.
+    ├── training                              -> You can include your own trainer and models here.
     │   ├── decoder
     │   ├── encoder
     │   ├── encoder_decoder
     │   └── trainer.py
-    ├── ui
+    ├── ui                                    -> User Interface for interative evaluation
     │   └── evaluator_ui.py
-    └── visualization
+    └── visualization                         -> prepare figures for results.
         └── model_viz.py
 ````
 
