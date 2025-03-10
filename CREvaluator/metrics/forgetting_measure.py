@@ -9,5 +9,5 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
 sys.path.append(PREFIX_PATH)
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/AUC.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("AUClogger")
+logging.basicConfig(filename=PREFIX_PATH + 'logs/forgetting_measure.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
+logger = logging.getLogger("FMlogger")

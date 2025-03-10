@@ -8,5 +8,5 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
 sys.path.append(PREFIX_PATH)
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/Average_error.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename=PREFIX_PATH + 'logs/average_error.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
 logger = logging.getLogger("AvgErrorlogger")
