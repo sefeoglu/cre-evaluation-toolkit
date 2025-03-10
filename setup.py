@@ -9,7 +9,7 @@ reqs = parse_requirements("requirements.txt")
 setup(
    name='CREvaluator',
    version='1.0',
-   description='A Continual Relation Extraction Evaluator',
+   description='An Evaluation Toolkit for Continual Relation Extraction',
    author='Sefika Efeoglu',
    author_email='sefikaefeoglu@gmail.com',
    packages=['CREvaluator'],
@@ -18,7 +18,7 @@ setup(
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
         'License :: MIT',  
-        'Operating System :: POSIX :: Linux',        
+        'Operating System :: MacOS',        
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
