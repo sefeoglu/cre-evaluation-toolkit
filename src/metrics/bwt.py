@@ -6,10 +6,7 @@ import sys
 import json
 import numpy as np
 import logging
-
 from sklearn.metrics import accuracy_score
-logger = logging.getLogger(__name__)
-
 
 
 PACKAGE_PARENT = '.'
@@ -17,9 +14,9 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
 sys.path.append(PREFIX_PATH)
-# print(PREFIX_PATH)
-logging.basicConfig(filename=PREFIX_PATH + 'logs/bwt.log', encoding='utf-8', level=logging.DEBUG)
 
+logging.basicConfig(filename=PREFIX_PATH + 'logs/bwt.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
+logger = logging.getLogger("BWTlogger")
 
 def compute_accuracy(y_true, results):
     y_pred = [ pred for pred in results]
@@ -64,16 +61,16 @@ def bwt(result_folder, ground_truth_folder, number_of_tasks):
             run.append({'results':results})
     except:
         if not os.path.exists(result_folder):
-            logger.error(f"Folder {result_folder} does not exist")
+            logger.error(f"BWT: Folder {result_folder} does not exist")
         if not os.path.exists(ground_truth_folder):
-            logger.error(f"Folder {ground_truth_folder} does not exist")
+            logger.error(f"BWT: Folder {ground_truth_folder} does not exist")
     
-        logger.warn("Error while reading results")
-        logger.warn("Please make sure that the results are in the correct format")
+        logger.warn("BWT: Error while reading results")
+        logger.warn("BWT: Please make sure that the results are in the correct format")
         
         return None
     if len(run) == 0:
-        logger.warn("No results found")
+        logger.warn("BWT: No results found")
         return None
     else:
         bwt = bwt_metric(run)
@@ -107,14 +104,11 @@ def bwt_metric(accuracies):
 
 
     bwt /= (N - 1)  # Averaging the differences
-    # print(bwt)
+
     return bwt
 
-if __name__ == "__main__":
-    result_folder = "./results"
-    ground_truth_folder ="./data"
-    number_of_tasks = 10
-    # print(PREFIX_PATH)
-    bwt = bwt(result_folder, ground_truth_folder, number_of_tasks)
-    
-    # bwt = bwt(run)
+# if __name__ == "__main__":
+#     result_folder = "./results"
+#     ground_truth_folder ="./data"
+#     number_of_tasks = 10
+#     bwt = bwt(result_folder, ground_truth_folder, number_of_tasks)
