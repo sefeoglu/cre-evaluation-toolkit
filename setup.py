@@ -7,12 +7,12 @@ def parse_requirements(requirements):
 reqs = parse_requirements("requirements.txt")
 
 setup(
-   name='cre-evaluation-toolkit',
+   name='CREvaluator',
    version='1.0',
    description='A Continual Relation Extraction Evaluator',
    author='Sefika Efeoglu',
    author_email='sefikaefeoglu@gmail.com',
-   packages=['cre-evaluation-toolkit'],
+   packages=['CREvaluator'],
    install_requires=reqs,
    classifiers=[
         'Development Status :: 1 - Planning',
