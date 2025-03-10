@@ -3,6 +3,34 @@
 CREvaluator provides various continual learning metrics to evaluate continual learning performance. Additionally, it 
 provides task incremental learning models and visualization module for evaluation of previously seen tasks across task incremantal learning.
 
+
+
+## CREvaluator 
+
+### Installation
+````xml
+$ git clone https://github.com/sefeoglu/cre-evaluation-toolkit.git
+$ cd  cre-evaluation-toolkit
+$ pip install .
+$ pip install --upgrade .
+````
+
+### Uninstall
+````xml
+$ pip uninstall CREvaluator
+
+````
+### Usage
+````python
+from CREvaluator.metrics import backward_transfer
+
+result_folder = "results"
+ground_truth_folder ="data"
+number_of_tasks = 10
+bwt = backward_transfer.bwt(result_folder, ground_truth_folder, number_of_tasks)
+````
+
+## Folder Structure
 ````xml
 .
 ├── LICENSE
@@ -39,8 +67,6 @@ provides task incremental learning models and visualization module for evaluatio
     └── visualization                         -> prepare figures for results.
         └── model_viz.py
 ````
-
-## Usage
 
 ## Result
 
