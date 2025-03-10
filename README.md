@@ -1,4 +1,6 @@
 # CREvaluator: An Evaluation Toolkit for Continual Relation Extraction
+[![Python 3.12.7](https://img.shields.io/badge/python-3.12.7-blue.svg)](https://www.python.org/downloads/release/python-3127/)
+
 
 CREvaluator provides various continual learning metrics to evaluate continual learning performance. Additionally, it 
 provides task incremental learning models and visualization module for evaluation of previously seen tasks across task incremantal learning.
