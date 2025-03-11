@@ -40,10 +40,10 @@ bwt = backward_transfer.bwt(result_folder, ground_truth_folder, number_of_tasks)
 ├── logs            
 ├── data                                      -> data (ground truths) will be here for evaluation or give your ground truth path to metrics_settings.yaml
 ├── results                                   -> you can put your results (predictions) or training your data with our models.
-├── settings                                  -> task incremental training and metrics settings.
-│   ├── metrics_settings.yaml
-│   └── training_settings.yaml
-└── src
+└── CREvaluator
+    ├── settings                                  -> task incremental training and metrics settings.
+    │   ├── metrics_settings.yaml
+    │   └── training_settings.yaml
     ├── metrics                               ->support various metrics for evaluation of continual relation extraction.
     │   ├── average_accuracy.py
     │   ├── average_error.py
@@ -57,13 +57,15 @@ bwt = backward_transfer.bwt(result_folder, ground_truth_folder, number_of_tasks)
     │   ├── seen_class_accuracy.py
     │   ├── unseen_class_accuracy.py
     │   └── ....
+    ├── models
+    │   ├── decoder
+    │   ├── encoder
+    │   └── encoder_decoder
     ├── task_preparation
     │   └── task_data.py
     ├── training                              -> You can include your own trainer and models here.
-    │   ├── decoder
-    │   ├── encoder
-    │   ├── encoder_decoder
-    │   └── trainer.py
+    │   ├── few_shot_trainer.py
+    │   └── full_cre_trainer.py
     ├── ui                                    -> User Interface for interative evaluation
     │   └── evaluator_ui.py
     └── visualization                         -> prepare figures for results.
