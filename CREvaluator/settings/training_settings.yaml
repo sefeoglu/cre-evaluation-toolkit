@@ -1,0 +1,43 @@
+{
+  "train": [
+    {
+      "dataset": "cifar10",
+      "model": "resnet18",
+      "batch_size": 128,
+      "num_epochs": 10,
+      "learning_rate": 0.001,
+      "momentum": 0.9,
+      "weight_decay": 0.0005,
+      "num_workers": 4,
+      "device": "cuda",
+      "seed": 42,
+      "CL_type": "TIL",
+      "training_type": "train",
+      "num_task": 10,
+      "task_path": "task",
+      "test_data_path": "data",
+      "save_model_path": "model"
+    }
+  ],
+  "test": [
+    {
+      "dataset": "cifar10",
+      "model": "resnet18",
+      "batch_size": 128,
+      "num_epochs": 10,
+      "learning_rate": 0.001,
+      "momentum": 0.9,
+      "weight_decay": 0.0005,
+      "num_workers": 4,
+      "device": "cuda",
+      "seed": 42,
+      "CL_type": "TIL",
+      "training_type": "test",
+      "num_task": 10,
+      "task_path": "task",
+      "test_data_path": "data",
+      "save_results_path": "results",
+      "metric": "accuracy"
+    }
+  ]
+}
