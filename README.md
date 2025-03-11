@@ -48,7 +48,7 @@ bwt = backward_transfer.bwt(result_folder, ground_truth_folder, number_of_tasks)
     │   ├── average_accuracy.py
     │   ├── average_error.py
     │   ├── average_forgetting.py
-    │   ├── bwt.py
+    │   ├── backward_transfer.py
     │   ├── forgetting_measure.py
     │   ├── forward_transfer.py
     │   ├── learning_accuracy.py
