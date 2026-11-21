@@ -19,6 +19,7 @@ CREvaluator is a lightweight library for measuring performance across sequential
 - [Metric conventions](#metric-conventions)
 - [Citation](#citation)
 - [License](#license)
+- [Visualization](#visualization)
 
 ## Installation
 
@@ -75,6 +76,32 @@ from CREvaluator.metrics import backward_transfer
 
 bwt = backward_transfer.bwt("results", "data", number_of_tasks=10)
 ```
+
+## Visualization
+
+The optional plotting helpers visualize accuracy matrices, learning curves, and aggregate summaries:
+
+```python
+import matplotlib.pyplot as plt
+
+from CREvaluator.viz import (
+    plot_accuracy_matrix,
+    plot_average_accuracy_curve,
+    plot_summary,
+    save_figure,
+)
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(12, 4))
+plot_accuracy_matrix(accuracies, ax=left)
+plot_average_accuracy_curve(metrics, ax=right)
+plt.tight_layout()
+save_figure(right, "results/average_accuracy.png", dpi=200)
+
+plot_summary(report)
+plt.show()
+```
+
+Matplotlib is included in the package requirements. Passing an existing Matplotlib `Axes` object lets you compose plots into custom layouts.
 
 ## Metric conventions
 
