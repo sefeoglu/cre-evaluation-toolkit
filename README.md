@@ -1,7 +1,7 @@
 <div align="center">
     <img src="docs/assets/crevaluator-logo.svg" width="150" alt="CREvaluator logo: an accuracy matrix and learning-curve trace">
     <h1>CREvaluator</h1>
-    <p>Continual-learning evaluation metrics for Python</p>
+    <p>Continual learning evaluation metrics for Python</p>
     <p>
         <a href="https://www.python.org/"><img alt="Python 3.10+" src="https://img.shields.io/badge/Python-%3E%3D3.10-3776AB?logo=python&logoColor=white"></a>
         <a href="https://github.com/sefeoglu/cre-evaluation-toolkit/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-2A7A62.svg"></a>
@@ -97,7 +97,7 @@ If you use CREvaluator in research, cite the software and include the version us
 ```bibtex
 @software{efeoglu2025crevaluator,
     author  = {Efeoglu, Sefika},
-    title   = {CREvaluator: Continual-Learning Evaluation Metrics},
+    title   = {CREvaluator: Continual Learning Evaluation Metrics},
     year    = {2025},
     version = {0.1.0},
     url     = {https://github.com/sefeoglu/cre-evaluation-toolkit}
