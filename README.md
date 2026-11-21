@@ -1,79 +1,44 @@
-# CREvaluator: An Evaluation Toolkit for Continual Relation Extraction
-[![Python 3.12.7](https://img.shields.io/badge/python-3.12.7-blue.svg)](https://www.python.org/downloads/release/python-3127/)
+# CREvaluator
 
+CREvaluator is a Python metric library for evaluating continual-learning experiments. It includes task-sequence metrics, label-based classification metrics, and the original JSON-backed BWT workflow.
 
-CREvaluator provides various continual learning metrics to evaluate continual learning performance. Additionally, it 
-provides task incremental learning models and visualization module for evaluation of previously seen tasks across task incremantal learning.
+## Installation
 
+```bash
+pip install .
+```
 
+## Continual learning metrics
 
-## CREvaluator 
+Use a square accuracy matrix. Row `i` contains evaluation results after learning task `i`; column `j` contains results on task `j`. Use `None` when a task has not been evaluated yet. Accuracies and baselines are fractions in `[0, 1]`.
 
-### Installation
-````xml
-$ git clone https://github.com/sefeoglu/cre-evaluation-toolkit.git
-$ cd  cre-evaluation-toolkit
-$ pip install .
-$ pip install --upgrade .
-````
+```python
+from CREvaluator.metrics import ContinualLearningMetrics
 
-### Uninstall
-````xml
-$ pip uninstall CREvaluator
+accuracies = [
+    [0.80, 0.35, 0.25],  # after task 1; future-task scores are the FWT pre-learning scores
+    [0.68, 0.75, 0.40],  # after task 2
+    [0.61, 0.70, 0.82],  # after task 3
+]
+baselines = [0.10, 0.20, 0.30]
 
-````
-### Usage
-````python
+metrics = ContinualLearningMetrics(accuracies, baseline_accuracies=baselines)
+print(metrics.summary())
+```
+
+The summary contains the average-accuracy trajectory and its normalized area, final average accuracy, learning accuracy, backward transfer, average forgetting, and forward transfer. Forward transfer requires one baseline score per task. BWT, forgetting, FWT, and AUC are undefined for a single task; the summary reports `None` for those values.
+
+Individual functions are also available from their modules, for example `CREvaluator.metrics.backward_transfer.bwt_metric(matrix)`, `CREvaluator.metrics.precision.precision(y_true, y_pred)`, and `CREvaluator.metrics.recall.recall(y_true, y_pred)`.
+
+The legacy JSON workflow remains available:
+
+```python
 from CREvaluator.metrics import backward_transfer
 
-result_folder = "results"
-ground_truth_folder ="data"
-number_of_tasks = 10
-bwt = backward_transfer.bwt(result_folder, ground_truth_folder, number_of_tasks)
-````
+score = backward_transfer.bwt("results", "data", number_of_tasks=10)
+```
 
-## Folder Structure
-````xml
-.
-├── LICENSE
-├── README.md
-├── logs            
-├── data                                      -> data (ground truths) will be here for evaluation or give your ground truth path to metrics_settings.yaml
-├── results                                   -> you can put your results (predictions) or training your data with our models.
-└── CREvaluator
-    ├── settings                                  -> task incremental training and metrics settings.
-    │   ├── metrics_settings.yaml
-    │   └── training_settings.yaml
-    ├── metrics                               ->support various metrics for evaluation of continual relation extraction.
-    │   ├── average_accuracy.py
-    │   ├── average_error.py
-    │   ├── average_forgetting.py
-    │   ├── backward_transfer.py
-    │   ├── forgetting_measure.py
-    │   ├── forward_transfer.py
-    │   ├── learning_accuracy.py
-    │   ├── whole_accuracy.py
-    │   ├── time_evaluator.py
-    │   ├── seen_class_accuracy.py
-    │   ├── unseen_class_accuracy.py
-    │   └── ....
-    ├── models
-    │   ├── decoder
-    │   ├── encoder
-    │   └── encoder_decoder
-    ├── task_preparation
-    │   └── task_data.py
-    ├── training                              -> You can include your own trainer and models here.
-    │   ├── few_shot_trainer.py
-    │   └── full_cre_trainer.py
-    ├── ui                                    -> User Interface for interative evaluation
-    │   └── evaluator_ui.py
-    └── visualization                         -> prepare figures for results.
-        └── model_viz.py
-````
+## Metrics
 
-## Result
-
-## Demo
-## Cite
+The library provides average accuracy and error, learning accuracy, AUC, backward and forward transfer, per-task and average forgetting, precision, recall, whole/seen/unseen-class accuracy, RMSE, reward averaging, and elapsed-time measurement.
 

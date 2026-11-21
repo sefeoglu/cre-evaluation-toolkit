@@ -1,12 +1,20 @@
-import sys
-import os
-import logging
-import json
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
+from collections.abc import Iterable
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/recall.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("Recalllogger")
+from sklearn.metrics import recall_score
+
+from ._metric_utils import paired_labels
+
+
+def recall(
+	y_true: Iterable[object],
+	y_pred: Iterable[object],
+	average: str | None = "macro",
+) -> float | dict[object, float]:
+	"""Compute recall; use ``average=None`` for per-class scores."""
+	actual, predicted = paired_labels(y_true, y_pred)
+	if average is None:
+		labels = sorted(set(actual) | set(predicted))
+		scores = recall_score(actual, predicted, labels=labels, average=None, zero_division=0)
+		return dict(zip(labels, scores.tolist()))
+	scores = recall_score(actual, predicted, average=average, zero_division=0)
+	return float(scores)

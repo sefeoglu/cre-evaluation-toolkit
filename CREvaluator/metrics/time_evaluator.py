@@ -1,13 +1,10 @@
-import sys
-import os
-import logging
-import json
+from time import perf_counter
 
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/time_evaluator.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("TElogger")
+def time_evaluator(start_time: float, end_time: float | None = None) -> float:
+	"""Return elapsed seconds from a ``perf_counter`` start value."""
+	end = perf_counter() if end_time is None else end_time
+	elapsed = end - start_time
+	if elapsed < 0:
+		raise ValueError("end_time must not precede start_time")
+	return elapsed

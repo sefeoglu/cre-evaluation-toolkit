@@ -1,13 +1,12 @@
-import sys
-import os
-import logging
-import json
+from collections.abc import Iterable
 
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
+from ._metric_utils import accuracy_matrix, mean
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/learning_accuracy.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("LA_logger")
+
+def learning_accuracy(accuracies: Iterable[Iterable[float | None]]) -> float:
+	"""Return mean accuracy on each task immediately after it is learned."""
+	matrix = accuracy_matrix(accuracies)
+	diagonal = [matrix[index][index] for index in range(len(matrix))]
+	if any(score is None for score in diagonal):
+		raise ValueError("The accuracy matrix must contain all diagonal scores")
+	return mean((score for score in diagonal if score is not None), "learning accuracies")

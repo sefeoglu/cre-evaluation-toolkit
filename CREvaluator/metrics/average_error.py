@@ -1,12 +1,14 @@
-import sys
-import os
-import logging
-import json
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
+from collections.abc import Iterable
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/average_error.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("AvgErrorlogger")
+from ._metric_utils import numeric_values
+
+
+def average_error(accuracies: Iterable[float]) -> float:
+	"""Return classification error as one minus mean accuracy.
+
+	Accuracy values must be fractions in the range [0, 1].
+	"""
+	values = numeric_values(accuracies, "accuracies")
+	if any(not 0 <= accuracy <= 1 for accuracy in values):
+		raise ValueError("Accuracy values must be between 0 and 1")
+	return 1 - sum(values) / len(values)

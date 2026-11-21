@@ -2,26 +2,15 @@
 
 
 import os
-import sys
 import json
-import numpy as np
 import logging
 from sklearn.metrics import accuracy_score
+from ._metric_utils import accuracy_matrix, mean
 
-
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
-
-logging.basicConfig(filename=PREFIX_PATH + 'logs/backward_transfer.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
 logger = logging.getLogger("BWTlogger")
 
 def compute_accuracy(y_true, results):
-    y_pred = [ pred for pred in results]
-    return accuracy_score(y_true, y_pred)
-    
+    return accuracy_score(y_true, results)
 
 def read_json(path):
     with open(path, 'r', encoding="utf-8") as f:
@@ -33,79 +22,53 @@ def write_json(data, path):
         json.dump(data, f, indent=4, ensure_ascii=False)
 
 def bwt(result_folder, ground_truth_folder, number_of_tasks):
-
-    results = []
-    last_task_results = []
-    run = []
-
     try:
-        for task_id in range(1, number_of_tasks+1):
-            task = result_folder + f"/task_{task_id}/current_result.json"
-            result = read_json(task)
-            results.append(result[0]['acc'])
-            
-            #last task seen predictions
-            task = result_folder+f"/task_{task_id}/seen_task_predict.json"
-            last_task = read_json(task)
-            end = 0
-            start = 0
-            for task_id in range(1, number_of_tasks+1):
-                y_true_path = f"{ground_truth_folder}/task_{task_id}/test.json"
-                y_true = read_json(y_true_path)
-                end = start + len(y_true)
-                acc = compute_accuracy(y_true, last_task[start:end])
-                start = end
-                last_task_results.append(acc)
-            results.append(last_task_results)
-            
-            run.append({'results':results})
-    except:
-        if not os.path.exists(result_folder):
-            logger.error(f"BWT: Folder {result_folder} does not exist")
-        if not os.path.exists(ground_truth_folder):
-            logger.error(f"BWT: Folder {ground_truth_folder} does not exist")
-    
-        logger.warn("BWT: Error while reading results")
-        logger.warn("BWT: Please make sure that the results are in the correct format")
-        
+        if number_of_tasks < 2:
+            raise ValueError("At least two tasks are required to calculate BWT")
+        ground_truths = [
+            read_json(os.path.join(ground_truth_folder, f"task_{task_id}", "test.json"))
+            for task_id in range(1, number_of_tasks + 1)
+        ]
+        matrix = [[None] * number_of_tasks for _ in range(number_of_tasks)]
+
+        for checkpoint in range(1, number_of_tasks + 1):
+            predictions = read_json(
+                os.path.join(result_folder, f"task_{checkpoint}", "seen_task_predict.json")
+            )
+            expected_count = sum(len(ground_truths[index]) for index in range(checkpoint))
+            if len(predictions) != expected_count:
+                raise ValueError(
+                    f"Task {checkpoint} has {len(predictions)} predictions; expected {expected_count}"
+                )
+
+            offset = 0
+            for task_index in range(checkpoint):
+                task_labels = ground_truths[task_index]
+                end = offset + len(task_labels)
+                matrix[checkpoint - 1][task_index] = compute_accuracy(
+                    task_labels, predictions[offset:end]
+                )
+                offset = end
+
+        return bwt_metric(matrix)
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
+        logger.warning("BWT could not be calculated: %s", error)
         return None
-    if len(run) == 0:
-        logger.warn("BWT: No results found")
-        return None
-    else:
-        bwt = bwt_metric(run)
-        return bwt
-    
-    
 
 def bwt_metric(accuracies):
-    """
-    Calculate the Backward Transfer (BWT) metric.
-
-    Parameters:
-    - accuracies: A 2D list or numpy array where accuracies[N-1][t] is the test accuracy
-                  on task t after sequential training on all N tasks, and accuracies[t][t]
-                  is the test accuracy on task t immediately after it was learned.
-
-    Returns:
-    - BWT: The Backward Transfer metric.
-    """
-    N = len(accs)
-    accuracies = np.array(accuracies)
-    accs = accuracies['results'][:N-1]
-    seen_task = accuracies['results'][N-1]
-
-
-    bwt = 0
-    for t in range(0, N):
-        A_N_t = accs[t]  # Accuracy on task t after all tasks
-        A_t_t = seen_task[t]
-        bwt += (A_N_t - A_t_t)
-
-
-    bwt /= (N - 1)  # Averaging the differences
-
-    return bwt
+    """Return mean final-minus-learned accuracy for all earlier tasks."""
+    matrix = accuracy_matrix(accuracies)
+    if len(matrix) < 2:
+        raise ValueError("At least two tasks are required to calculate BWT")
+    differences = []
+    final_row = matrix[-1]
+    for task_index in range(len(matrix) - 1):
+        learned_score = matrix[task_index][task_index]
+        final_score = final_row[task_index]
+        if learned_score is None or final_score is None:
+            raise ValueError("The matrix must include learned and final scores for prior tasks")
+        differences.append(final_score - learned_score)
+    return mean(differences, "backward-transfer scores")
 
 # if __name__ == "__main__":
 #     result_folder = "./results"

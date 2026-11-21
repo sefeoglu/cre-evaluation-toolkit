@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 def parse_requirements(requirements):
     with open(requirements) as f:
@@ -8,18 +8,22 @@ reqs = parse_requirements("requirements.txt")
 
 setup(
    name='CREvaluator',
-   version='1.0',
-   description='An Evaluation Toolkit for Continual Relation Extraction',
+    version='0.1.0',
+    description='Metrics for evaluating continual-learning experiments',
    author='Sefika Efeoglu',
    author_email='sefikaefeoglu@gmail.com',
-   packages=['CREvaluator'],
+    packages=find_packages(),
+    python_requires='>=3.10',
    install_requires=reqs,
    classifiers=[
-        'Development Status :: 1 - Planning',
+       'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
-        'License :: MIT',  
-        'Operating System :: MacOS',        
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+       'License :: OSI Approved :: MIT License',
+       'Operating System :: OS Independent',
+       'Programming Language :: Python :: 3',
+       'Programming Language :: Python :: 3.10',
+       'Programming Language :: Python :: 3.11',
+       'Programming Language :: Python :: 3.12',
+       'Programming Language :: Python :: 3.13',
     ],
 )

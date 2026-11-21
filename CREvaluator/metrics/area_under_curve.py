@@ -1,14 +1,18 @@
-import sys
-import os
-import logging
-import json
+from collections.abc import Iterable
+from math import isfinite
 
 
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
+def area_under_curve(scores: Iterable[float], normalize: bool = False) -> float:
+	"""Return the trapezoidal area over equally spaced evaluation steps.
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/area_under_curve.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("AUClogger")
+	Set ``normalize=True`` to divide by the span of the evaluation steps,
+	yielding the mean score over that span.
+	"""
+	values = [float(score) for score in scores]
+	if len(values) < 2:
+		raise ValueError("At least two scores are required to calculate area")
+	if not all(isfinite(score) for score in values):
+		raise ValueError("Scores must all be finite numbers")
+
+	area = sum((left + right) / 2 for left, right in zip(values, values[1:]))
+	return area / (len(values) - 1) if normalize else area

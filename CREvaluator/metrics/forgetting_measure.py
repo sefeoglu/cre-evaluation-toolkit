@@ -1,13 +1,28 @@
-import sys
-import os
-import logging
-import json
+from collections.abc import Iterable
 
-PACKAGE_PARENT = '.'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-PREFIX_PATH = "/".join(os.path.dirname(os.path.abspath(__file__)).split("/")[:-2]) + "/"
-sys.path.append(PREFIX_PATH)
+from ._metric_utils import accuracy_matrix
 
-logging.basicConfig(filename=PREFIX_PATH + 'logs/forgetting_measure.log', format='%(asctime)s %(message)s', encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger("FMlogger")
+
+def forgetting_measure(accuracies: Iterable[Iterable[float | None]]) -> list[float]:
+	"""Return per-task forgetting: best prior accuracy minus final accuracy.
+
+	Rows are evaluation checkpoints and columns are tasks. The newest task is
+	omitted because it has no later checkpoint at which it could be forgotten.
+	"""
+	matrix = accuracy_matrix(accuracies)
+	if len(matrix) < 2:
+		raise ValueError("At least two tasks are required to measure forgetting")
+
+	forgetting = []
+	final_row = matrix[-1]
+	for task_index in range(len(matrix) - 1):
+		prior_scores = [
+			score
+			for row in matrix[task_index:-1]
+			if (score := row[task_index]) is not None
+		]
+		final_score = final_row[task_index]
+		if not prior_scores or final_score is None:
+			raise ValueError("Each previously learned task needs prior and final scores")
+		forgetting.append(max(prior_scores) - final_score)
+	return forgetting
