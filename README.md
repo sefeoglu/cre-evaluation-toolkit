@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="docs/assets/crevaluator-logo.png" width="640" height="320" alt="CREvaluator: Continual learning">
+    <img src="docs/assets/crevaluator-logo.svg" width="640" height="320" alt="CREvaluator: Continual learning">
     <h1>CREvaluator</h1>
     <p>Continual learning evaluation metrics for Python</p>
     <p>
