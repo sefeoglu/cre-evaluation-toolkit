@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-labelledby="logo-title logo-description">
+  <title id="logo-title">CREvaluator</title>
+  <desc id="logo-description">Continual-learning evaluation metrics, represented by an accuracy matrix and a learning-curve trace.</desc>
+  <rect width="1280" height="640" fill="#17212b"/>
+  <g transform="translate(48 50) scale(3)">
+    <rect width="180" height="180" rx="28" fill="#17212b"/>
+    <g fill="none" stroke="#43515e" stroke-width="2">
+      <path d="M38 43h104M38 76h104M38 109h104M38 142h104"/>
+      <path d="M38 43v99M72 43v99M106 43v99M142 43v99"/>
+    </g>
+    <g fill="#2b817b">
+      <rect x="46" y="117" width="17" height="17" rx="4"/>
+      <rect x="80" y="84" width="17" height="17" rx="4"/>
+      <rect x="114" y="96" width="17" height="17" rx="4"/>
+    </g>
+    <path d="M54 76 88 60l34 11 20-28" fill="none" stroke="#66ded0" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+    <g fill="#f2f7f5" stroke="#17212b" stroke-width="3">
+      <circle cx="54" cy="76" r="6"/>
+      <circle cx="88" cy="60" r="6"/>
+      <circle cx="122" cy="71" r="6"/>
+      <circle cx="142" cy="43" r="6"/>
+    </g>
+    <circle cx="142" cy="43" r="3" fill="#f1a66b"/>
+  </g>
+  <path d="M650 176v288" stroke="#43515e" stroke-width="3"/>
+  <circle cx="650" cy="176" r="8" fill="#f1a66b"/>
+  <text x="710" y="306" fill="#f2f7f5" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="92" font-weight="700">CREvaluator</text>
+  <text x="716" y="376" fill="#66ded0" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="30" font-weight="500">Continual learning</text>
+</svg>
